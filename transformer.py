@@ -306,8 +306,10 @@ if __name__ == '__main__':
     '''
 
     from tokeniser import Tokeniser
+    from tok2vec import Tok2Vec
     from load_text import load_prideandprejudice
     import sys
+    import os
 
     ''' 
     Rather than feeding just training data as in the previous assignments, for this assignment it's
@@ -421,19 +423,41 @@ if __name__ == '__main__':
 
         return tf.math.rsqrt(self.d_model) * tf.math.minimum(arg1, arg2)
 
-    # Load text for training
-    text = load_prideandprejudice(max_words=1000)
  
     seq_len = 10     #Length of the input sequence to the transformer
-    vec_dim = 768    #Dimension of the embedding vectors
+    vec_dim = 200    #Dimension of the embedding vectors
+    window_size = 10  #Size of the window for the tok2vec model
+    embedding_epochs = 20  #Number of epochs to train the embedding for
+    epochs = 30      #Number of epochs to train the transformer for
+    text_length = 1000 # /121810
+    vocab_size = 1000
+    embedding = "CUSTOM" # BERT, CUSTOM
 
-    epochs = 2       #Number of epochs to train for
+    # Load text for training  
+    text = load_prideandprejudice()
 
-    # This loads both the tokeniser and the pretrained BERT embedding, for your own
-    # embedding you will have separate tokeniser and embedding loaders.
-    tokeniser = Tokeniser.load_bert()
+    if embedding == "BERT":
+      # This loads both the tokeniser and the pretrained BERT embedding, for your own
+      # embedding you will have separate tokeniser and embedding loaders.
+      tokeniser = Tokeniser.load_bert()
+    else:
+      # Check if tokeniser has been saved to disk
+      tokeniser_filename="vocab.json"
+      if os.path.exists(tokeniser_filename):
+        # Load tokeniser from disk
+        print("Loading tokeniser from '%s'..." % (tokeniser_filename))
+        tokeniser = Tokeniser.load(tokeniser_filename)
+      else:
+        # Create a new tokeniser, train it on the text and save it to disk
+        tokeniser = Tokeniser(vocab_size=vocab_size)
+        print("Building BPE tokeniser...")
+        tokeniser.train(text, verbose=True)
+        print("Saving tokeniser to '%s'..." % (tokeniser_filename))
+        tokeniser.save(tokeniser_filename)
 
-    # Conver text to token ids
+    ids = tokeniser.encode(text, verbose=True)  
+
+    # Convert text to token ids
     print("Converting training text to tokens...")
     ids = tokeniser.encode(text)
 
@@ -450,7 +474,10 @@ if __name__ == '__main__':
     # Fetch the (vocab_size, vec_dim)-shape embedding matrix for the BERT tokeniser,
     # for your own embedding will have to fetch the embedding matrix from your tok2vec
     # model
-    w = tokeniser.get_embedding()
+    if embedding == "BERT":
+      w = tokeniser.get_bert_embedding()
+    else:
+      w = Tok2Vec(vocab_size, ids, window_size, vec_dim, embedding_epochs)
 
     # The first layer of the model is the embedding layer.  The fixed embedding is conveyed
     # in the w argument passed in, which is a numpy array of shape (vocab_size, vec_dim).  You
@@ -458,6 +485,8 @@ if __name__ == '__main__':
     # shape (num_examples, seq_len) of integers representing tokens from the vocabulary; the
     # output is a (num_examples, seq_len, vec_dim) tensor of word vectors.
     model.add(FixedEmbedding(w, seq_len))
+    # vec_dim = vocab_size
+    # model.add(OneHotEmbedding(vocab_size, seq_len))
 
     # Positional endcoding is added to the embedding. This layer needs to know the vec_dim of
     # the embedding space and the seq_len of the input sequence.  The input is a tensor of shape
@@ -498,6 +527,7 @@ if __name__ == '__main__':
     model.fit(train_data, epochs=epochs)
 
     # Test the model by generating text that follows this prompt
+    # prompt = "Write a story about a dog that goes to the moon."
     prompt = "It is a truth universally acknowledged"
    
     print(prompt, end='')

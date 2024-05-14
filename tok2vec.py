@@ -62,15 +62,11 @@ def Tok2Vec(vocab_size, ids, window_size, vec_dim, epochs, filename=None):
 
     # train test val split
     n = len(x)
-    n_train = int(0.8 * n)
-    n_test = int(0.1 * n)
-    n_val = n - n_train - n_test
+    n_train = int(0.9 * n)
+    n_val = n - n_train
 
     x_train = x[:n_train]
     y_train = y[:n_train]
-
-    x_test = x[n_train:n_train + n_test]
-    y_test = y[n_train:n_train + n_test]
 
     x_val = x[:n_val] 
     y_val = y[:n_val]

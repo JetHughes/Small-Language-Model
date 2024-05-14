@@ -432,6 +432,8 @@ def plot_tok2vec(w, word_index, num_words_to_show=100, show_word_tokens=[]):
     import matplotlib.pyplot as plt
     from sklearn.manifold import TSNE
 
+    print("Plotting word vectors in 2D using t-SNE...")
+
     if len(show_word_tokens)==0:
         try:
             import nltk
@@ -462,6 +464,7 @@ def plot_tok2vec(w, word_index, num_words_to_show=100, show_word_tokens=[]):
 
     # Convert the tokens to vectors
     x = w[show_word_tokens]
+    print(x.shape)
 
     # Do dimension reduction from vec_dim to 2 (so we can plot the word points in 2D)
     tsne = TSNE(n_components=2, random_state=0)

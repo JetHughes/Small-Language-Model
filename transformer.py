@@ -425,11 +425,11 @@ if __name__ == '__main__':
 
  
     seq_len = 10     #Length of the input sequence to the transformer
-    vec_dim = 200    #Dimension of the embedding vectors
-    window_size = 10  #Size of the window for the tok2vec model
-    embedding_epochs = 20  #Number of epochs to train the embedding for
-    epochs = 30      #Number of epochs to train the transformer for
-    text_length = 1000 # /121810
+    vec_dim = 50    #Dimension of the embedding vectors
+    window_size = 2  #Size of the window for the tok2vec model
+    embedding_epochs = 10  #Number of epochs to train the embedding for
+    epochs = 10      #Number of epochs to train the transformer for
+    text_length = 120000 # /121810
     vocab_size = 1000
     embedding = "CUSTOM" # BERT, CUSTOM
 
@@ -442,7 +442,7 @@ if __name__ == '__main__':
       tokeniser = Tokeniser.load_bert()
     else:
       # Check if tokeniser has been saved to disk
-      tokeniser_filename="vocab.json"
+      tokeniser_filename= f'vocab_{str(vocab_size)}.json'
       if os.path.exists(tokeniser_filename):
         # Load tokeniser from disk
         print("Loading tokeniser from '%s'..." % (tokeniser_filename))

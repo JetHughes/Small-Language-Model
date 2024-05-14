@@ -1,9 +1,5 @@
-from tokeniser import Tokeniser
-from load_text import load_prideandprejudice
 import tensorflow as tf
 import numpy as np
-import sys
-import os
 
 class Embedding(tf.keras.layers.Layer):
     def __init__(self, units):
@@ -22,14 +18,16 @@ class Embedding(tf.keras.layers.Layer):
     def call(self, inputs):
         return tf.nn.tanh(tf.matmul(inputs, self.w))
         
-class tok2vec(tf.keras.Model):
-    def __init__(self, vocab_size, embedding_dimensions):
+class Tok2VecModel(tf.keras.Model):
+    def __init__(self, vocab_size, vec_dim):
         super().__init__()
-        self.embedding = Embedding(embedding_dimensions)
+        self.embedding = Embedding(vec_dim)
+        # self.embedding = tf.keras.layers.Dense(vec_dim, activation='tanh')
         self.dense = tf.keras.layers.Dense(vocab_size, activation='softmax')
 
     def get_embeddings(self):
         return self.embedding.get_embeddings()
+        # return self.embedding.get_weights()[0]
 
     def call(self, inputs):
         x = self.embedding(inputs)
@@ -37,14 +35,14 @@ class tok2vec(tf.keras.Model):
     
         
 def id_to_onehot(i, vocab_size):
+    # onehot = np.zeros(vocab_size, dtype='uint8')
     onehot = np.zeros(vocab_size)
     onehot[i] = 1
     return onehot      
 
-def Tok2Vec(vocab_size, ids, window_size, vec_dim, epochs, filename=None):    
+def tok2Vec(vocab_size, ids, window_size, vec_dim, epochs, filename=None):    
     # Create cbow sequences
     onehot = [id_to_onehot(i, vocab_size) for i in ids]
-    window_size
 
     if window_size % 2 != 0:
         raise ValueError("window_size must be even")
@@ -73,15 +71,15 @@ def Tok2Vec(vocab_size, ids, window_size, vec_dim, epochs, filename=None):
 
     # Create model
 
-    model = tok2vec(vocab_size, vec_dim)
+    model = Tok2VecModel(vocab_size, vec_dim)
     model.compile(optimizer='adam', loss='categorical_crossentropy', metrics=['accuracy'])
 
-    model.fit(x_train, y_train, 
+    train_info = model.fit(x_train, y_train, 
                 validation_data=(x_val, y_val),
                 epochs=epochs,
                 shuffle=True,
                 verbose=1)
     model.summary()
 
-    return model.get_embeddings()
+    return model.get_embeddings(), train_info
         

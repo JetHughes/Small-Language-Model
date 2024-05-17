@@ -418,7 +418,7 @@ class Tokeniser:
         plt.show()
 
 
-def plot_tok2vec(w, word_index, num_words_to_show=100, show_word_tokens=[]):
+def plot_tok2vec(w, word_index, num_words_to_show=100, show_word_tokens=[], figsize=(20,15)):
     '''
     Plot the word vectors in 2D using t-SNE.  This method is dependent on nltk library (to select words to show).
     You can install the library with 'pip install nltk'
@@ -464,14 +464,13 @@ def plot_tok2vec(w, word_index, num_words_to_show=100, show_word_tokens=[]):
 
     # Convert the tokens to vectors
     x = w[show_word_tokens]
-    print(x.shape)
 
     # Do dimension reduction from vec_dim to 2 (so we can plot the word points in 2D)
     tsne = TSNE(n_components=2, random_state=0)
     x_2d = tsne.fit_transform(x)
 
     # Plot vectors showing the first 100 tokens with text close to the point corresponding to the token
-    plt.figure(figsize=(6, 5))
+    plt.figure(figsize=figsize)
     for i in range(len(show_word_tokens)):
         plt.scatter(x_2d[i,0], x_2d[i,1],c='b')
         word = words[show_word_tokens[i]]

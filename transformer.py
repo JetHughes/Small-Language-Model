@@ -293,7 +293,116 @@ class TransformerLayer(tf.keras.layers.Layer):
     x = self.ffn(x)  # Shape `(batch_size, seq_len, d_model)`.
     return x
   
+''' 
+Rather than feeding just training data as in the previous assignments, for this assignment it's
+best to use a custom written data generator.  This is a way for you to contol how the batches
+of training data are created.  Here's a really simple data generator, that, in an epoch, randomly
+picks words from text and creates a batch of training data of input and target output sequences of
+fixed length.
+'''
+class predictTextDataGenerator(tf.keras.utils.Sequence):
+  def __init__(self, ids, seq_len,batch_size):
+    '''
+    Constructor for the data generator.  
 
+    param ids: A list of integers representing the tokens in the training text.
+    param seq_len: The length of the input and target sequences for the transformer model.
+    param batch_size: The number of sequences in each batch for training          
+    '''
+
+    # Save all the training text and parameters of the data generator
+    self.ids = ids          
+    self.seq_len = seq_len
+    self.batch_size = batch_size
+
+    # Compute the number of samples - it's the length of the text minus the sequence length
+    self.num_samples = len(self.ids)-seq_len-1
+    # Run the on_epoch_end() method - which scrambles the data into the batchs
+    # (this method will also be run during trainin at the end of each training epoch)
+    self.on_epoch_end()
+
+  def __len__(self):
+    '''
+    You must provide this method to tell the model how many batches there are in an epoch.
+
+    returns The number of batches in an epoch.
+    '''
+    return self.num_samples // self.batch_size
+
+  def __data_generation(self, list_IDs_temp):
+    '''
+    This method generates a batch of training data for the model.  It's called by the
+    __getitem__() method which is called by the model during training.
+
+    param list_IDs_temp: A list of integers representing the indexes of the training data
+    to be included in the batch.
+    returns A tuple of input and target output sequences for the model.
+    '''
+
+    # The input and target sequences are both of shape (batch_size, seq_len) and
+    # are integer ids of the tokens (the transformer model will convert these to word vectors based
+    # on the embedding you specify)
+    X = np.zeros((self.batch_size, self.seq_len),dtype='int')
+    y = np.zeros((self.batch_size, self.seq_len),dtype='int')
+
+    # For each index in the list of indexes...
+    for i, ID in enumerate(list_IDs_temp):
+        #...get the sequence of tokens from the training of length seq_len starting at
+        #index ID.  In this case the input sequence is the sequence spans the entire
+        #length of seq_len, but you might also train on shorter sequences, padded with zeros.
+        #makse_loss will included padded inputs/outputs.
+        X[i,:self.seq_len] = self.ids[ID:ID+self.seq_len]
+        #....and the sequence of target tokens, which is the sequence of tokens from the
+        #training text of length seq_len starting at index ID+1 (offset by one, to match
+        #the next word in the output to current word in the input)
+        y[i,:self.seq_len] = self.ids[ID+1:ID+self.seq_len+1]
+    return X, y
+
+  def __getitem__(self, index):
+    '''
+    This method is called by the model during training to get a batch of training data.
+    
+    param index: The index of the batch to get.
+    returns A tuple of input and target output sequences for the model.
+    '''
+    
+    # Generate indexes of the batch
+    list_IDs_temp = self.list_IDs[index*self.batch_size:(index+1)*self.batch_size]
+
+    # Generate data
+    X, y = self.__data_generation(list_IDs_temp)
+
+    return X, y
+
+  def on_epoch_end(self):
+    '''
+    This method is called at the end of each epoch of training.  It shuffles the data
+    so that the batches are different in each epoch.
+    '''
+    
+    # Shuffle the tokens
+    self.list_IDs = np.arange(self.num_samples)
+    np.random.shuffle(self.list_IDs)
+
+
+# Custom learning rate schedule for the transformer model - taken directly from
+# https://www.tensorflow.org/text/tutorials/transformer
+class CustomSchedule(tf.keras.optimizers.schedules.LearningRateSchedule):
+  def __init__(self, d_model, warmup_steps=4000):
+    super().__init__()
+
+    self.d_model = d_model
+    self.d_model = tf.cast(self.d_model, tf.float32)
+
+    self.warmup_steps = warmup_steps
+
+  def __call__(self, step):
+    step = tf.cast(step, dtype=tf.float32)
+    arg1 = tf.math.rsqrt(step)
+    arg2 = step * (self.warmup_steps ** -1.5)
+
+    return tf.math.rsqrt(self.d_model) * tf.math.minimum(arg1, arg2)
+      
 if __name__ == '__main__':
     '''
     This is an example of how to build and train your transformer model.  This example uses the pretrained
@@ -306,158 +415,22 @@ if __name__ == '__main__':
     '''
 
     from tokeniser import Tokeniser
-    from tok2vec import Tok2Vec
     from load_text import load_prideandprejudice
     import sys
-    import os
 
-    ''' 
-    Rather than feeding just training data as in the previous assignments, for this assignment it's
-    best to use a custom written data generator.  This is a way for you to contol how the batches
-    of training data are created.  Here's a really simple data generator, that, in an epoch, randomly
-    picks words from text and creates a batch of training data of input and target output sequences of
-    fixed length.
-    '''
-    class predictTextDataGenerator(tf.keras.utils.Sequence):
-    
-      def __init__(self, ids, seq_len,batch_size):
-          '''
-          Constructor for the data generator.  
-
-          param ids: A list of integers representing the tokens in the training text.
-          param seq_len: The length of the input and target sequences for the transformer model.
-          param batch_size: The number of sequences in each batch for training          
-          '''
-
-          # Save all the training text and parameters of the data generator
-          self.ids = ids          
-          self.seq_len = seq_len
-          self.batch_size = batch_size
-
-          # Compute the number of samples - it's the length of the text minus the sequence length
-          self.num_samples = len(self.ids)-seq_len-1
-          # Run the on_epoch_end() method - which scrambles the data into the batchs
-          # (this method will also be run during trainin at the end of each training epoch)
-          self.on_epoch_end()
-
-      def __len__(self):
-          '''
-          You must provide this method to tell the model how many batches there are in an epoch.
-
-          returns The number of batches in an epoch.
-          '''
-          return self.num_samples // self.batch_size
-
-      def __data_generation(self, list_IDs_temp):
-          '''
-          This method generates a batch of training data for the model.  It's called by the
-          __getitem__() method which is called by the model during training.
-
-          param list_IDs_temp: A list of integers representing the indexes of the training data
-          to be included in the batch.
-          returns A tuple of input and target output sequences for the model.
-          '''
-
-          # The input and target sequences are both of shape (batch_size, seq_len) and
-          # are integer ids of the tokens (the transformer model will convert these to word vectors based
-          # on the embedding you specify)
-          X = np.zeros((self.batch_size, self.seq_len),dtype='int')
-          y = np.zeros((self.batch_size, self.seq_len),dtype='int')
-
-          # For each index in the list of indexes...
-          for i, ID in enumerate(list_IDs_temp):
-              #...get the sequence of tokens from the training of length seq_len starting at
-              #index ID.  In this case the input sequence is the sequence spans the entire
-              #length of seq_len, but you might also train on shorter sequences, padded with zeros.
-              #makse_loss will included padded inputs/outputs.
-              X[i,:seq_len] = self.ids[ID:ID+seq_len]
-              #....and the sequence of target tokens, which is the sequence of tokens from the
-              #training text of length seq_len starting at index ID+1 (offset by one, to match
-              #the next word in the output to current word in the input)
-              y[i,:seq_len] = self.ids[ID+1:ID+seq_len+1]
-
-
-          return X, y
-
-      def __getitem__(self, index):
-          '''
-          This method is called by the model during training to get a batch of training data.
-          
-          param index: The index of the batch to get.
-          returns A tuple of input and target output sequences for the model.
-          '''
-          
-          # Generate indexes of the batch
-          list_IDs_temp = self.list_IDs[index*self.batch_size:(index+1)*self.batch_size]
-
-          # Generate data
-          X, y = self.__data_generation(list_IDs_temp)
-
-          return X, y
-
-      def on_epoch_end(self):
-          '''
-          This method is called at the end of each epoch of training.  It shuffles the data
-          so that the batches are different in each epoch.
-          '''
-          
-          # Shuffle the tokens
-          self.list_IDs = np.arange(self.num_samples)
-          np.random.shuffle(self.list_IDs)
-
-    # Custom learning rate schedule for the transformer model - taken directly from
-    # https://www.tensorflow.org/text/tutorials/transformer
-    class CustomSchedule(tf.keras.optimizers.schedules.LearningRateSchedule):
-      def __init__(self, d_model, warmup_steps=4000):
-        super().__init__()
-
-        self.d_model = d_model
-        self.d_model = tf.cast(self.d_model, tf.float32)
-
-        self.warmup_steps = warmup_steps
-
-      def __call__(self, step):
-        step = tf.cast(step, dtype=tf.float32)
-        arg1 = tf.math.rsqrt(step)
-        arg2 = step * (self.warmup_steps ** -1.5)
-
-        return tf.math.rsqrt(self.d_model) * tf.math.minimum(arg1, arg2)
-
+    # Load text for training
+    text = load_prideandprejudice(max_words=1000)
  
     seq_len = 10     #Length of the input sequence to the transformer
-    vec_dim = 50    #Dimension of the embedding vectors
-    window_size = 2  #Size of the window for the tok2vec model
-    embedding_epochs = 10  #Number of epochs to train the embedding for
-    epochs = 10      #Number of epochs to train the transformer for
-    text_length = 120000 # /121810
-    vocab_size = 1000
-    embedding = "CUSTOM" # BERT, CUSTOM
+    vec_dim = 768    #Dimension of the embedding vectors
 
-    # Load text for training  
-    text = load_prideandprejudice()
+    epochs = 2       #Number of epochs to train for
 
-    if embedding == "BERT":
-      # This loads both the tokeniser and the pretrained BERT embedding, for your own
-      # embedding you will have separate tokeniser and embedding loaders.
-      tokeniser = Tokeniser.load_bert()
-    else:
-      # Check if tokeniser has been saved to disk
-      tokeniser_filename= f'vocab_{str(vocab_size)}.json'
-      if os.path.exists(tokeniser_filename):
-        # Load tokeniser from disk
-        print("Loading tokeniser from '%s'..." % (tokeniser_filename))
-        tokeniser = Tokeniser.load(tokeniser_filename)
-      else:
-        # Create a new tokeniser, train it on the text and save it to disk
-        tokeniser = Tokeniser(vocab_size=vocab_size)
-        print("Building BPE tokeniser...")
-        tokeniser.train(text, verbose=True)
-        print("Saving tokeniser to '%s'..." % (tokeniser_filename))
-        tokeniser.save(tokeniser_filename)
+    # This loads both the tokeniser and the pretrained BERT embedding, for your own
+    # embedding you will have separate tokeniser and embedding loaders.
+    tokeniser = Tokeniser.load_bert()
 
-    ids = tokeniser.encode(text, verbose=True)  
-
-    # Convert text to token ids
+    # Conver text to token ids
     print("Converting training text to tokens...")
     ids = tokeniser.encode(text)
 
@@ -474,10 +447,7 @@ if __name__ == '__main__':
     # Fetch the (vocab_size, vec_dim)-shape embedding matrix for the BERT tokeniser,
     # for your own embedding will have to fetch the embedding matrix from your tok2vec
     # model
-    if embedding == "BERT":
-      w = tokeniser.get_bert_embedding()
-    else:
-      w = Tok2Vec(vocab_size, ids, window_size, vec_dim, embedding_epochs)
+    w = tokeniser.get_embedding()
 
     # The first layer of the model is the embedding layer.  The fixed embedding is conveyed
     # in the w argument passed in, which is a numpy array of shape (vocab_size, vec_dim).  You
@@ -485,8 +455,6 @@ if __name__ == '__main__':
     # shape (num_examples, seq_len) of integers representing tokens from the vocabulary; the
     # output is a (num_examples, seq_len, vec_dim) tensor of word vectors.
     model.add(FixedEmbedding(w, seq_len))
-    # vec_dim = vocab_size
-    # model.add(OneHotEmbedding(vocab_size, seq_len))
 
     # Positional endcoding is added to the embedding. This layer needs to know the vec_dim of
     # the embedding space and the seq_len of the input sequence.  The input is a tensor of shape
@@ -527,7 +495,6 @@ if __name__ == '__main__':
     model.fit(train_data, epochs=epochs)
 
     # Test the model by generating text that follows this prompt
-    # prompt = "Write a story about a dog that goes to the moon."
     prompt = "It is a truth universally acknowledged"
    
     print(prompt, end='')

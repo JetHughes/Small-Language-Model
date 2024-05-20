@@ -7,21 +7,23 @@ import os
 from tok2vec import tok2Vec
 import sys
 
-seq_len = 10     #Length of the input sequence to the transformer
+seq_len = 50     #Length of the input sequence to the transformer
 vec_dim = 150    #Dimension of the embedding vectors
 window_size = 8  #Size of the window for the tok2vec model
-embedding_epochs = 10  #Number of epochs to train the embedding for
+embedding_epochs = 5  #Number of epochs to train the embedding for
 epochs = 10      #Number of epochs to train the transformer for
 text_length = 120000 # / 121810 / 700000
 vocab_size = 1000
 embedding = "CUSTOM" # BERT, CUSTOM
+method = "skipgram"
 dataset = "prideandprejudice" # warandpeace, prideandprejudice
-load_embedding = False
+load_embedding = True
 
-tokeniser_filename= f'vocab_{str(vocab_size)}_{str(dataset)}.json'
-embedding_filename = f'tok2vec_{str(vocab_size)}_{str(vec_dim)}_{str(text_length)}_{str(window_size)}_{str(embedding_epochs)}'
+tokeniser_filename= f'vocab/vocab_{vocab_size}_{dataset}.json'
+tok2vec_savename = f'tok2vec_{vocab_size}_{vec_dim}_{text_length}_{window_size}_{epochs}_{method}_{dataset}'
 
 # Load text for training  
+print("Loading " + dataset + "...")
 if dataset == "prideandprejudice":
     text = load_prideandprejudice(max_words=text_length)
 elif dataset == "warandpeace":
@@ -43,17 +45,33 @@ ids = tokeniser.encode(text, verbose=True)
 
 # Train/Load the embedding
 print("Training/Loading embedding...")
-w,_ = tok2Vec(vocab_size, ids, window_size, vec_dim, embedding_epochs, savename=embedding_filename, load_from_file=load_embedding)
+w,history = tok2Vec(vocab_size, ids, 
+              window_size, vec_dim, 
+              embedding_epochs, 
+              method=method, 
+              savename=tok2vec_savename, 
+              load_from_file=load_embedding)
+print("Embedding shape: " + str(w.shape))
+
+n = len(ids)
+train_ids = ids[:int(0.9*n)]
+valid_ids = ids[int(0.9*n):]
 
 # Create a data generator
 print("Loading data generator...")
-train_data = predictTextDataGenerator(ids=ids, seq_len=seq_len, batch_size=32)
+train_data = predictTextDataGenerator(ids=train_ids, seq_len=seq_len, batch_size=32)
+valid_data = predictTextDataGenerator(ids=valid_ids, seq_len=seq_len, batch_size=32)
 
 # Create a new sequential model
 model = tf.keras.models.Sequential()
 model.add(FixedEmbedding(w, seq_len))
 # model.add(OneHotEmbedding(vocab_size, seq_len))
 model.add(PositionalEncoding(vec_dim=vec_dim, seq_len=seq_len))
+model.add(TransformerLayer(vec_dim=vec_dim, key_dim=32, num_heads=8, dff=256))
+model.add(TransformerLayer(vec_dim=vec_dim, key_dim=32, num_heads=8, dff=256))
+model.add(TransformerLayer(vec_dim=vec_dim, key_dim=32, num_heads=8, dff=256))
+model.add(TransformerLayer(vec_dim=vec_dim, key_dim=32, num_heads=8, dff=256))
+model.add(TransformerLayer(vec_dim=vec_dim, key_dim=32, num_heads=8, dff=256))
 model.add(TransformerLayer(vec_dim=vec_dim, key_dim=32, num_heads=8, dff=256))
 model.add(tf.keras.layers.Dense(vocab_size, activation='softmax'))
 
@@ -65,7 +83,7 @@ model.compile(optimizer=opt,
                 loss=masked_loss,
                 metrics=[masked_accuracy])
 model.summary()
-model.fit(train_data, epochs=epochs)
+model.fit(train_data, epochs=epochs, validation_data=valid_data, verbose=1)
 
 prompt = "It is a truth universally acknowledged"
 

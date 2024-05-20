@@ -48,7 +48,7 @@ def load_prideandprejudice(max_words = 121810):
     """ 
 
     url = 'https://www.gutenberg.org/files/1342/1342-0.txt'
-    filename = "1342-0.txt"
+    filename = "books/1342-0.txt"
 
     # Download the book text from Project Gutenberg website
     # if not found on hard drive
@@ -114,7 +114,7 @@ def load_warandpeace(max_words = 598184):
     """ 
 
     url = 'https://www.gutenberg.org/cache/epub/2600/pg2600.txt'
-    filename = "pg2600.txt"
+    filename = "books/pg2600.txt"
 
     # Download the book text from Project Gutenberg website
     # if not found on hard drive

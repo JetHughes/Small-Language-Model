@@ -71,9 +71,10 @@ def get_tok2vec_model(vocab_size, vec_dim):
 
 def tok2Vec(vocab_size, ids, window_size, vec_dim, epochs, method="cbow", savename=None, load_from_file=True):   
     # Load the model from file if it exists"cbow", 
+    model_save_name = "tok2vec_models/" + savename + ".h5"
+    history_save_name = "tok2vec_models/history_" + savename + ".hist"
+
     if savename and load_from_file:
-        model_save_name = savename + ".h5"
-        history_save_name = "history_" + savename + ".hist"
         if os.path.exists(model_save_name) and os.path.exists(history_save_name):
             model = tf.keras.models.load_model(model_save_name)
             with gzip.open(history_save_name) as f:
@@ -105,4 +106,4 @@ def tok2Vec(vocab_size, ids, window_size, vec_dim, epochs, method="cbow", savena
         with gzip.open(history_save_name, 'w') as f:
             pickle.dump(train_info.history, f)
 
-    return model.get_weights()[0] , train_info.history
+    return model.get_weights()[0], train_info.history

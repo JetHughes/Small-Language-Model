@@ -418,7 +418,7 @@ class Tokeniser:
         plt.show()
 
 
-def plot_tok2vec(w, word_index, num_words_to_show=100, show_word_tokens=[], figsize=(20,15)):
+def plot_tok2vec(w, word_index, num_words_to_show=100, show_word_tokens=[], figsize=(20,15), fontsize=9):
     '''
     Plot the word vectors in 2D using t-SNE.  This method is dependent on nltk library (to select words to show).
     You can install the library with 'pip install nltk'
@@ -474,7 +474,7 @@ def plot_tok2vec(w, word_index, num_words_to_show=100, show_word_tokens=[], figs
     for i in range(len(show_word_tokens)):
         plt.scatter(x_2d[i,0], x_2d[i,1],c='b')
         word = words[show_word_tokens[i]]
-        plt.text(x_2d[i,0], x_2d[i,1], word, fontsize=9)
+        plt.text(x_2d[i,0], x_2d[i,1], word, fontsize=fontsize)
     plt.show()
 
 
@@ -486,7 +486,7 @@ if __name__ == '__main__':
     import os
 
     vocab_size = 200
-    filename = 'vocab.json'
+    filename = 'vocab/vocab.json'
 
     # Load text
     text = load_prideandprejudice()

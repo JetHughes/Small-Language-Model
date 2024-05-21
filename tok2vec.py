@@ -80,22 +80,15 @@ def tok2Vec(vocab_size, ids, window_size, vec_dim, epochs, method="cbow", savena
             with gzip.open(history_save_name) as f:
                 history = pickle.load(f)
             return model.get_weights()[0], history
-    
-    # train val split
-    n_train = (int)(0.9 * len(ids))
-    train_ids = ids[:n_train]
-    val_ids = ids[n_train:]
 
     # Create cbow sequences
-    train = tok2vecDataGenerator(train_ids, window_size, vocab_size, batch_size=32, method=method)
-    val = tok2vecDataGenerator(val_ids, window_size, vocab_size, batch_size=32, method=method)
+    train = tok2vecDataGenerator(ids, window_size, vocab_size, batch_size=32, method=method)
 
     # Create model
     model = get_tok2vec_model(vocab_size, vec_dim)
 
     # Train model
     train_info = model.fit(train, 
-                validation_data=(val),
                 epochs=epochs,
                 shuffle=True,
                 verbose=1)

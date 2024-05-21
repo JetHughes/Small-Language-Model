@@ -90,6 +90,7 @@ def load_prideandprejudice(max_words = 121810):
 
     # Split on empty spaces
     text = text.split()
+    print("unique words: ", len(set(text)))
 
     # Select max_wods words from the string (assuming spaces delimit words)
     if max_words < len(text):
@@ -100,6 +101,7 @@ def load_prideandprejudice(max_words = 121810):
 
     # Clean text
     text = clean_text(text)
+
 
     return text
 
@@ -227,6 +229,8 @@ def load_warandpeace(max_words = 598184):
 
     # Clean up empty spaces
     text = text.split()
+
+    print("unique words: ", len(set(text)))
 
     # Select max_wods words from the string (assuming spaces delimit words)
     if max_words is not None and max_words < len(text):

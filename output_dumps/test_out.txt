@@ -1,0 +1,439 @@
+2024-05-20 19:23:10.578530: I tensorflow/core/util/port.cc:113] oneDNN custom operations are on. You may see slightly different numerical results due to floating-point round-off errors from different computation orders. To turn them off, set the environment variable `TF_ENABLE_ONEDNN_OPTS=0`.
+2024-05-20 19:23:10.601643: I tensorflow/core/platform/cpu_feature_guard.cc:210] This TensorFlow binary is optimized to use available CPU instructions in performance-critical operations.
+To enable the following instructions: AVX2 AVX_VNNI FMA, in other operations, rebuild TensorFlow with the appropriate compiler flags.
+2024-05-20 19:23:11.020890: W tensorflow/compiler/tf2tensorrt/utils/py_utils.cc:38] TF-TRT Warning: Could not find TensorRT
+Loading warandpeace...
+Loading tokeniser from 'vocab/vocab_2000_warandpeace.json'...
+Converting training text to tokens...
+100% (1926 of 1926) |##############################################################################################| Elapsed Time: 0:00:48 Time:  0:00:48 
+Training/Loading embedding...
+/home/jet/miniconda3/envs/tf/lib/python3.11/site-packages/keras/src/layers/core/dense.py:88: UserWarning: Do not pass an `input_shape`/`input_dim` argument to a layer. When using Sequential models, prefer using an `Input(shape)` object as the first layer in the model instead.
+  super().__init__(activity_regularizer=activity_regularizer, **kwargs)
+2024-05-20 19:24:00.679807: I external/local_xla/xla/stream_executor/cuda/cuda_executor.cc:998] successful NUMA node read from SysFS had negative value (-1), but there must be at least one NUMA node, so returning NUMA node zero. See more at https://github.com/torvalds/linux/blob/v6.0/Documentation/ABI/testing/sysfs-bus-pci#L344-L355
+2024-05-20 19:24:00.699116: I external/local_xla/xla/stream_executor/cuda/cuda_executor.cc:998] successful NUMA node read from SysFS had negative value (-1), but there must be at least one NUMA node, so returning NUMA node zero. See more at https://github.com/torvalds/linux/blob/v6.0/Documentation/ABI/testing/sysfs-bus-pci#L344-L355
+2024-05-20 19:24:00.699217: I external/local_xla/xla/stream_executor/cuda/cuda_executor.cc:998] successful NUMA node read from SysFS had negative value (-1), but there must be at least one NUMA node, so returning NUMA node zero. See more at https://github.com/torvalds/linux/blob/v6.0/Documentation/ABI/testing/sysfs-bus-pci#L344-L355
+2024-05-20 19:24:00.700169: I external/local_xla/xla/stream_executor/cuda/cuda_executor.cc:998] successful NUMA node read from SysFS had negative value (-1), but there must be at least one NUMA node, so returning NUMA node zero. See more at https://github.com/torvalds/linux/blob/v6.0/Documentation/ABI/testing/sysfs-bus-pci#L344-L355
+2024-05-20 19:24:00.700232: I external/local_xla/xla/stream_executor/cuda/cuda_executor.cc:998] successful NUMA node read from SysFS had negative value (-1), but there must be at least one NUMA node, so returning NUMA node zero. See more at https://github.com/torvalds/linux/blob/v6.0/Documentation/ABI/testing/sysfs-bus-pci#L344-L355
+2024-05-20 19:24:00.700278: I external/local_xla/xla/stream_executor/cuda/cuda_executor.cc:998] successful NUMA node read from SysFS had negative value (-1), but there must be at least one NUMA node, so returning NUMA node zero. See more at https://github.com/torvalds/linux/blob/v6.0/Documentation/ABI/testing/sysfs-bus-pci#L344-L355
+2024-05-20 19:24:00.746539: I external/local_xla/xla/stream_executor/cuda/cuda_executor.cc:998] successful NUMA node read from SysFS had negative value (-1), but there must be at least one NUMA node, so returning NUMA node zero. See more at https://github.com/torvalds/linux/blob/v6.0/Documentation/ABI/testing/sysfs-bus-pci#L344-L355
+2024-05-20 19:24:00.746620: I external/local_xla/xla/stream_executor/cuda/cuda_executor.cc:998] successful NUMA node read from SysFS had negative value (-1), but there must be at least one NUMA node, so returning NUMA node zero. See more at https://github.com/torvalds/linux/blob/v6.0/Documentation/ABI/testing/sysfs-bus-pci#L344-L355
+2024-05-20 19:24:00.746674: I external/local_xla/xla/stream_executor/cuda/cuda_executor.cc:998] successful NUMA node read from SysFS had negative value (-1), but there must be at least one NUMA node, so returning NUMA node zero. See more at https://github.com/torvalds/linux/blob/v6.0/Documentation/ABI/testing/sysfs-bus-pci#L344-L355
+2024-05-20 19:24:00.746727: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1928] Created device /job:localhost/replica:0/task:0/device:GPU:0 with 13589 MB memory:  -> device: 0, name: NVIDIA GeForce RTX 4080, pci bus id: 0000:01:00.0, compute capability: 8.9
+Model: "sequential"
+┏━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┳━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┳━━━━━━━━━━━━━━━━━┓
+┃ Layer (type)                         ┃ Output Shape                ┃         Param # ┃
+┡━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━╇━━━━━━━━━━━━━━━━━━━━━━━━━━━━━╇━━━━━━━━━━━━━━━━━┩
+│ dense (Dense)                        │ (None, 150)                 │         300,000 │
+├──────────────────────────────────────┼─────────────────────────────┼─────────────────┤
+│ dense_1 (Dense)                      │ (None, 2000)                │         300,000 │
+└──────────────────────────────────────┴─────────────────────────────┴─────────────────┘
+ Total params: 600,000 (2.29 MB)
+ Trainable params: 600,000 (2.29 MB)
+ Non-trainable params: 0 (0.00 B)
+Epoch 1/10
+/home/jet/miniconda3/envs/tf/lib/python3.11/site-packages/keras/src/trainers/data_adapters/py_dataset_adapter.py:120: UserWarning: Your `PyDataset` class should call `super().__init__(**kwargs)` in its constructor. `**kwargs` can include `workers`, `use_multiprocessing`, `max_queue_size`. Do not pass these arguments to `fit()`, as they will be ignored.
+  self._warn_if_super_not_called()
+WARNING: All log messages before absl::InitializeLog() is called are written to STDERR
+I0000 00:00:1716189841.263826  139438 service.cc:145] XLA service 0x7fd58c005550 initialized for platform CUDA (this does not guarantee that XLA will be used). Devices:
+I0000 00:00:1716189841.263853  139438 service.cc:153]   StreamExecutor device (0): NVIDIA GeForce RTX 4080, Compute Capability 8.9
+2024-05-20 19:24:01.274381: I tensorflow/compiler/mlir/tensorflow/utils/dump_mlir_util.cc:268] disabling MLIR crash reproducer, set env var `MLIR_CRASH_REPRODUCER_DIRECTORY` to enable.
+2024-05-20 19:24:01.302944: I external/local_xla/xla/stream_executor/cuda/cuda_dnn.cc:465] Loaded cuDNN version 8907
+WARNING: All log messages before absl::InitializeLog() is called are written to STDERR
+I0000 00:00:1716189841.641151  139498 asm_compiler.cc:369] ptxas warning : Registers are spilled to local memory in function 'triton_gemm_dot_213', 96 bytes spill stores, 124 bytes spill loads
+
+I0000 00:00:1716189841.648942  139504 asm_compiler.cc:369] ptxas warning : Registers are spilled to local memory in function 'triton_gemm_dot_213', 76 bytes spill stores, 76 bytes spill loads
+
+I0000 00:00:1716189841.657105  139506 asm_compiler.cc:369] ptxas warning : Registers are spilled to local memory in function 'triton_gemm_dot_241', 8 bytes spill stores, 8 bytes spill loads
+
+I0000 00:00:1716189841.657243  139494 asm_compiler.cc:369] ptxas warning : Registers are spilled to local memory in function 'triton_gemm_dot_213', 220 bytes spill stores, 196 bytes spill loads
+
+I0000 00:00:1716189841.666078  139511 asm_compiler.cc:369] ptxas warning : Registers are spilled to local memory in function 'triton_gemm_dot_78', 20 bytes spill stores, 20 bytes spill loads
+
+I0000 00:00:1716189841.688740  139493 asm_compiler.cc:369] ptxas warning : Registers are spilled to local memory in function 'triton_gemm_dot_78', 4 bytes spill stores, 4 bytes spill loads
+
+I0000 00:00:1716189841.824243  139497 asm_compiler.cc:369] ptxas warning : Registers are spilled to local memory in function 'triton_gemm_dot_78', 676 bytes spill stores, 736 bytes spill loads
+
+I0000 00:00:1716189841.851271  139513 asm_compiler.cc:369] ptxas warning : Registers are spilled to local memory in function 'triton_gemm_dot_213', 780 bytes spill stores, 780 bytes spill loads
+
+I0000 00:00:1716189842.013022  139494 asm_compiler.cc:369] ptxas warning : Registers are spilled to local memory in function 'triton_gemm_dot_213', 44 bytes spill stores, 44 bytes spill loads
+
+I0000 00:00:1716189842.087463  139512 asm_compiler.cc:369] ptxas warning : Registers are spilled to local memory in function 'triton_gemm_dot_78', 4 bytes spill stores, 4 bytes spill loads
+
+I0000 00:00:1716189842.165029  139496 asm_compiler.cc:369] ptxas warning : Registers are spilled to local memory in function 'triton_gemm_dot_213', 12 bytes spill stores, 12 bytes spill loads
+
+I0000 00:00:1716189842.194675  139509 asm_compiler.cc:369] ptxas warning : Registers are spilled to local memory in function 'triton_gemm_dot_78', 56 bytes spill stores, 56 bytes spill loads
+
+I0000 00:00:1716189842.239001  139501 asm_compiler.cc:369] ptxas warning : Registers are spilled to local memory in function 'triton_gemm_dot_78', 24 bytes spill stores, 24 bytes spill loads
+
+I0000 00:00:1716189842.262308  139492 asm_compiler.cc:369] ptxas warning : Registers are spilled to local memory in function 'triton_gemm_dot_241', 8 bytes spill stores, 8 bytes spill loads
+
+I0000 00:00:1716189842.357308  139497 asm_compiler.cc:369] ptxas warning : Registers are spilled to local memory in function 'triton_gemm_dot_241', 120 bytes spill stores, 120 bytes spill loads
+
+I0000 00:00:1716189842.381694  139507 asm_compiler.cc:369] ptxas warning : Registers are spilled to local memory in function 'triton_gemm_dot_213', 328 bytes spill stores, 328 bytes spill loads
+
+I0000 00:00:1716189842.816523  139438 device_compiler.h:188] Compiled cluster using XLA!  This line is logged at most once for the lifetime of the process.
+4063/4063 ━━━━━━━━━━━━━━━━━━━━ 32s 7ms/step - accuracy: 0.0980 - loss: 6.0629 - val_accuracy: 0.0971 - val_loss: 5.8820
+Epoch 2/10
+4063/4063 ━━━━━━━━━━━━━━━━━━━━ 30s 7ms/step - accuracy: 0.1100 - loss: 5.6486 - val_accuracy: 0.0972 - val_loss: 5.8626
+Epoch 3/10
+4063/4063 ━━━━━━━━━━━━━━━━━━━━ 30s 7ms/step - accuracy: 0.1099 - loss: 5.5958 - val_accuracy: 0.0979 - val_loss: 5.8604
+Epoch 4/10
+4063/4063 ━━━━━━━━━━━━━━━━━━━━ 30s 7ms/step - accuracy: 0.1112 - loss: 5.5588 - val_accuracy: 0.0975 - val_loss: 5.8663
+Epoch 5/10
+4063/4063 ━━━━━━━━━━━━━━━━━━━━ 30s 7ms/step - accuracy: 0.1103 - loss: 5.5274 - val_accuracy: 0.0979 - val_loss: 5.8730
+Epoch 6/10
+4063/4063 ━━━━━━━━━━━━━━━━━━━━ 30s 7ms/step - accuracy: 0.1108 - loss: 5.4978 - val_accuracy: 0.0965 - val_loss: 5.8831
+Epoch 7/10
+4063/4063 ━━━━━━━━━━━━━━━━━━━━ 30s 7ms/step - accuracy: 0.1111 - loss: 5.4718 - val_accuracy: 0.0974 - val_loss: 5.8984
+Epoch 8/10
+4063/4063 ━━━━━━━━━━━━━━━━━━━━ 30s 7ms/step - accuracy: 0.1104 - loss: 5.4522 - val_accuracy: 0.0961 - val_loss: 5.9163
+Epoch 9/10
+4063/4063 ━━━━━━━━━━━━━━━━━━━━ 30s 7ms/step - accuracy: 0.1107 - loss: 5.4338 - val_accuracy: 0.0973 - val_loss: 5.9325
+Epoch 10/10
+4063/4063 ━━━━━━━━━━━━━━━━━━━━ 30s 7ms/step - accuracy: 0.1107 - loss: 5.4150 - val_accuracy: 0.0973 - val_loss: 5.9450
+Model: "sequential"
+┏━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┳━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┳━━━━━━━━━━━━━━━━━┓
+┃ Layer (type)                         ┃ Output Shape                ┃         Param # ┃
+┡━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━╇━━━━━━━━━━━━━━━━━━━━━━━━━━━━━╇━━━━━━━━━━━━━━━━━┩
+│ dense (Dense)                        │ (None, 150)                 │         300,000 │
+├──────────────────────────────────────┼─────────────────────────────┼─────────────────┤
+│ dense_1 (Dense)                      │ (None, 2000)                │         300,000 │
+└──────────────────────────────────────┴─────────────────────────────┴─────────────────┘
+ Total params: 1,800,002 (6.87 MB)
+ Trainable params: 600,000 (2.29 MB)
+ Non-trainable params: 0 (0.00 B)
+ Optimizer params: 1,200,002 (4.58 MB)
+WARNING:absl:The `save_format` argument is deprecated in Keras 3. We recommend removing this argument as it can be inferred from the file path. Received: save_format=h5
+WARNING:absl:You are saving your model as an HDF5 file via `model.save()` or `keras.saving.save_model(model)`. This file format is considered legacy. We recommend using instead the native Keras format, e.g. `model.save('my_model.keras')` or `keras.saving.save_model(model, 'my_model.keras')`. 
+Embedding shape: (2000, 150)
+Loading data generator...
+/home/jet/csoc420_assignment2/transformer.py:113: UserWarning: Do not pass an `input_shape`/`input_dim` argument to a layer. When using Sequential models, prefer using an `Input(shape)` object as the first layer in the model instead.
+  super().__init__(input_shape=(seq_len,))
+Model: "sequential_1"
+┏━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┳━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┳━━━━━━━━━━━━━━━━━┓
+┃ Layer (type)                         ┃ Output Shape                ┃         Param # ┃
+┡━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━╇━━━━━━━━━━━━━━━━━━━━━━━━━━━━━╇━━━━━━━━━━━━━━━━━┩
+│ fixed_embedding (FixedEmbedding)     │ (None, 150)                 │               0 │
+├──────────────────────────────────────┼─────────────────────────────┼─────────────────┤
+│ positional_encoding                  │ (1, 128, 150)               │               0 │
+│ (PositionalEncoding)                 │                             │                 │
+├──────────────────────────────────────┼─────────────────────────────┼─────────────────┤
+│ transformer_layer (TransformerLayer) │ (1, 128, 150)               │         232,324 │
+├──────────────────────────────────────┼─────────────────────────────┼─────────────────┤
+│ transformer_layer_1                  │ (1, 128, 150)               │         232,324 │
+│ (TransformerLayer)                   │                             │                 │
+├──────────────────────────────────────┼─────────────────────────────┼─────────────────┤
+│ transformer_layer_2                  │ (1, 128, 150)               │         232,324 │
+│ (TransformerLayer)                   │                             │                 │
+├──────────────────────────────────────┼─────────────────────────────┼─────────────────┤
+│ transformer_layer_3                  │ (1, 128, 150)               │         232,324 │
+│ (TransformerLayer)                   │                             │                 │
+├──────────────────────────────────────┼─────────────────────────────┼─────────────────┤
+│ transformer_layer_4                  │ (1, 128, 150)               │         232,324 │
+│ (TransformerLayer)                   │                             │                 │
+├──────────────────────────────────────┼─────────────────────────────┼─────────────────┤
+│ transformer_layer_5                  │ (1, 128, 150)               │         232,324 │
+│ (TransformerLayer)                   │                             │                 │
+├──────────────────────────────────────┼─────────────────────────────┼─────────────────┤
+│ dense_14 (Dense)                     │ (1, 128, 2000)              │         302,000 │
+└──────────────────────────────────────┴─────────────────────────────┴─────────────────┘
+ Total params: 1,695,944 (6.47 MB)
+ Trainable params: 1,695,944 (6.47 MB)
+ Non-trainable params: 0 (0.00 B)
+Epoch 1/20
+W0000 00:00:1716190151.481518  139441 assert_op.cc:38] Ignoring Assert operator compile_loss/masked_loss/sparse_categorical_crossentropy/SparseSoftmaxCrossEntropyWithLogits/assert_equal_1/Assert/Assert
+I0000 00:00:1716190154.215223  143533 asm_compiler.cc:369] ptxas warning : Registers are spilled to local memory in function 'triton_gemm_dot_5', 148 bytes spill stores, 148 bytes spill loads
+
+I0000 00:00:1716190154.251766  143515 asm_compiler.cc:369] ptxas warning : Registers are spilled to local memory in function 'triton_gemm_dot_38', 532 bytes spill stores, 532 bytes spill loads
+
+I0000 00:00:1716190154.281980  143519 asm_compiler.cc:369] ptxas warning : Registers are spilled to local memory in function 'triton_gemm_dot_38', 408 bytes spill stores, 408 bytes spill loads
+
+I0000 00:00:1716190154.455845  143520 asm_compiler.cc:369] ptxas warning : Registers are spilled to local memory in function 'triton_gemm_dot_258', 4 bytes spill stores, 4 bytes spill loads
+
+I0000 00:00:1716190154.476890  143518 asm_compiler.cc:369] ptxas warning : Registers are spilled to local memory in function 'triton_gemm_dot_156', 8 bytes spill stores, 8 bytes spill loads
+
+I0000 00:00:1716190154.476927  143521 asm_compiler.cc:369] ptxas warning : Registers are spilled to local memory in function 'triton_gemm_dot_38', 164 bytes spill stores, 156 bytes spill loads
+
+I0000 00:00:1716190154.523787  143524 asm_compiler.cc:369] ptxas warning : Registers are spilled to local memory in function 'triton_gemm_dot_247', 464 bytes spill stores, 464 bytes spill loads
+
+I0000 00:00:1716190154.562157  143523 asm_compiler.cc:369] ptxas warning : Registers are spilled to local memory in function 'triton_gemm_dot_156', 676 bytes spill stores, 672 bytes spill loads
+
+I0000 00:00:1716190154.589435  143520 asm_compiler.cc:369] ptxas warning : Registers are spilled to local memory in function 'triton_gemm_dot_247', 24 bytes spill stores, 20 bytes spill loads
+
+I0000 00:00:1716190154.690415  143526 asm_compiler.cc:369] ptxas warning : Registers are spilled to local memory in function 'triton_gemm_dot_272', 8 bytes spill stores, 8 bytes spill loads
+
+I0000 00:00:1716190154.714217  143516 asm_compiler.cc:369] ptxas warning : Registers are spilled to local memory in function 'triton_gemm_dot_235', 484 bytes spill stores, 476 bytes spill loads
+
+I0000 00:00:1716190154.825304  143527 asm_compiler.cc:369] ptxas warning : Registers are spilled to local memory in function 'triton_gemm_dot_156', 200 bytes spill stores, 156 bytes spill loads
+
+I0000 00:00:1716190155.357252  143520 asm_compiler.cc:369] ptxas warning : Registers are spilled to local memory in function 'triton_gemm_dot_235', 32 bytes spill stores, 32 bytes spill loads
+
+32368/32376 ━━━━━━━━━━━━━━━━━━━━ 0s 6ms/step - loss: 3.0510 - masked_accuracy: 0.4020W0000 00:00:1716190358.829473  139437 assert_op.cc:38] Ignoring Assert operator compile_loss/masked_loss/sparse_categorical_crossentropy/SparseSoftmaxCrossEntropyWithLogits/assert_equal_1/Assert/Assert
+32376/32376 ━━━━━━━━━━━━━━━━━━━━ 221s 6ms/step - loss: 3.0508 - masked_accuracy: 0.4020 - val_loss: 4.1671 - val_masked_accuracy: 0.3335
+Epoch 2/20
+32376/32376 ━━━━━━━━━━━━━━━━━━━━ 205s 6ms/step - loss: 1.8010 - masked_accuracy: 0.5727 - val_loss: 4.6200 - val_masked_accuracy: 0.3217
+Epoch 3/20
+32376/32376 ━━━━━━━━━━━━━━━━━━━━ 207s 6ms/step - loss: 1.6363 - masked_accuracy: 0.6011 - val_loss: 4.8504 - val_masked_accuracy: 0.3156
+Epoch 4/20
+32376/32376 ━━━━━━━━━━━━━━━━━━━━ 206s 6ms/step - loss: 1.5557 - masked_accuracy: 0.6156 - val_loss: 5.0344 - val_masked_accuracy: 0.3118
+Epoch 5/20
+32376/32376 ━━━━━━━━━━━━━━━━━━━━ 206s 6ms/step - loss: 1.5055 - masked_accuracy: 0.6247 - val_loss: 5.1619 - val_masked_accuracy: 0.3097
+Epoch 6/20
+32376/32376 ━━━━━━━━━━━━━━━━━━━━ 206s 6ms/step - loss: 1.4705 - masked_accuracy: 0.6313 - val_loss: 5.2750 - val_masked_accuracy: 0.3074
+Epoch 7/20
+32376/32376 ━━━━━━━━━━━━━━━━━━━━ 206s 6ms/step - loss: 1.4446 - masked_accuracy: 0.6361 - val_loss: 5.3281 - val_masked_accuracy: 0.3067
+Epoch 8/20
+32376/32376 ━━━━━━━━━━━━━━━━━━━━ 205s 6ms/step - loss: 1.4243 - masked_accuracy: 0.6398 - val_loss: 5.3959 - val_masked_accuracy: 0.3051
+Epoch 9/20
+32376/32376 ━━━━━━━━━━━━━━━━━━━━ 205s 6ms/step - loss: 1.4076 - masked_accuracy: 0.6430 - val_loss: 5.4585 - val_masked_accuracy: 0.3041
+Epoch 10/20
+32376/32376 ━━━━━━━━━━━━━━━━━━━━ 207s 6ms/step - loss: 1.3941 - masked_accuracy: 0.6456 - val_loss: 5.5059 - val_masked_accuracy: 0.3029
+Epoch 11/20
+32376/32376 ━━━━━━━━━━━━━━━━━━━━ 206s 6ms/step - loss: 1.3825 - masked_accuracy: 0.6478 - val_loss: 5.5409 - val_masked_accuracy: 0.3024
+Epoch 12/20
+32376/32376 ━━━━━━━━━━━━━━━━━━━━ 206s 6ms/step - loss: 1.3725 - masked_accuracy: 0.6496 - val_loss: 5.5930 - val_masked_accuracy: 0.3008
+Epoch 13/20
+32376/32376 ━━━━━━━━━━━━━━━━━━━━ 206s 6ms/step - loss: 1.3630 - masked_accuracy: 0.6515 - val_loss: 5.6155 - val_masked_accuracy: 0.3014
+Epoch 14/20
+32376/32376 ━━━━━━━━━━━━━━━━━━━━ 207s 6ms/step - loss: 1.3549 - masked_accuracy: 0.6529 - val_loss: 5.6414 - val_masked_accuracy: 0.3005
+Epoch 15/20
+32376/32376 ━━━━━━━━━━━━━━━━━━━━ 206s 6ms/step - loss: 1.3481 - masked_accuracy: 0.6542 - val_loss: 5.6729 - val_masked_accuracy: 0.3007
+Epoch 16/20
+32376/32376 ━━━━━━━━━━━━━━━━━━━━ 207s 6ms/step - loss: 1.3417 - masked_accuracy: 0.6555 - val_loss: 5.6855 - val_masked_accuracy: 0.2998
+Epoch 17/20
+32376/32376 ━━━━━━━━━━━━━━━━━━━━ 207s 6ms/step - loss: 1.3355 - masked_accuracy: 0.6567 - val_loss: 5.7280 - val_masked_accuracy: 0.2996
+Epoch 18/20
+32376/32376 ━━━━━━━━━━━━━━━━━━━━ 207s 6ms/step - loss: 1.3304 - masked_accuracy: 0.6576 - val_loss: 5.7404 - val_masked_accuracy: 0.2991
+Epoch 19/20
+32376/32376 ━━━━━━━━━━━━━━━━━━━━ 207s 6ms/step - loss: 1.3253 - masked_accuracy: 0.6587 - val_loss: 5.7220 - val_masked_accuracy: 0.3001
+Epoch 20/20
+32376/32376 ━━━━━━━━━━━━━━━━━━━━ 207s 6ms/step - loss: 1.3206 - masked_accuracy: 0.6596 - val_loss: 5.7610 - val_masked_accuracy: 0.2986
+It is a truth universally acknowledgedI0000 00:00:1716194283.986830  189105 asm_compiler.cc:369] ptxas warning : Registers are spilled to local memory in function 'triton_gemm_dot_5', 148 bytes spill stores, 148 bytes spill loads
+
+I0000 00:00:1716194284.154752  189098 asm_compiler.cc:369] ptxas warning : Registers are spilled to local memory in function 'triton_gemm_dot_50', 32 bytes spill stores, 32 bytes spill loads
+
+I0000 00:00:1716194284.479974  189093 asm_compiler.cc:369] ptxas warning : Registers are spilled to local memory in function 'triton_gemm_dot_50', 532 bytes spill stores, 520 bytes spill loads
+
+ the man who had received such friendship reasons of will provison for a man.  for use to him has been he mentioned by experience in the world of great meaning for his own contrary.  He would have wished to mentnait.  But in Vyef commotion of the Austrian campaign a most of court,  the consequent of the Smo thanks now recog
+
+2024-05-20 20:38:08.841686: I tensorflow/core/util/port.cc:113] oneDNN custom operations are on. You may see slightly different numerical results due to floating-point round-off errors from different computation orders. To turn them off, set the environment variable `TF_ENABLE_ONEDNN_OPTS=0`.
+2024-05-20 20:38:08.865549: I tensorflow/core/platform/cpu_feature_guard.cc:210] This TensorFlow binary is optimized to use available CPU instructions in performance-critical operations.
+To enable the following instructions: AVX2 AVX_VNNI FMA, in other operations, rebuild TensorFlow with the appropriate compiler flags.
+2024-05-20 20:38:09.302139: W tensorflow/compiler/tf2tensorrt/utils/py_utils.cc:38] TF-TRT Warning: Could not find TensorRT
+Loading warandpeace...
+Loading tokeniser from 'vocab/vocab_1000_warandpeace.json'...
+Converting training text to tokens...
+100% (929 of 929) |################################################################################################| Elapsed Time: 0:00:27 Time:  0:00:27
+Training/Loading embedding...
+/home/jet/miniconda3/envs/tf/lib/python3.11/site-packages/keras/src/layers/core/dense.py:88: UserWarning: Do not pass an `input_shape`/`input_dim` argument to a layer. When using Sequential models, prefer using an `Input(shape)` object as the first layer in the model instead.
+  super().__init__(activity_regularizer=activity_regularizer, **kwargs)
+2024-05-20 20:38:38.524871: I external/local_xla/xla/stream_executor/cuda/cuda_executor.cc:998] successful NUMA node read from SysFS had negative value (-1), but there must be at least one NUMA node, so returning NUMA node zero. See more at https://github.com/torvalds/linux/blob/v6.0/Documentation/ABI/testing/sysfs-bus-pci#L344-L355
+2024-05-20 20:38:38.546122: I external/local_xla/xla/stream_executor/cuda/cuda_executor.cc:998] successful NUMA node read from SysFS had negative value (-1), but there must be at least one NUMA node, so returning NUMA node zero. See more at https://github.com/torvalds/linux/blob/v6.0/Documentation/ABI/testing/sysfs-bus-pci#L344-L355
+2024-05-20 20:38:38.546230: I external/local_xla/xla/stream_executor/cuda/cuda_executor.cc:998] successful NUMA node read from SysFS had negative value (-1), but there must be at least one NUMA node, so returning NUMA node zero. See more at https://github.com/torvalds/linux/blob/v6.0/Documentation/ABI/testing/sysfs-bus-pci#L344-L355
+2024-05-20 20:38:38.547200: I external/local_xla/xla/stream_executor/cuda/cuda_executor.cc:998] successful NUMA node read from SysFS had negative value (-1), but there must be at least one NUMA node, so returning NUMA node zero. See more at https://github.com/torvalds/linux/blob/v6.0/Documentation/ABI/testing/sysfs-bus-pci#L344-L355
+2024-05-20 20:38:38.547280: I external/local_xla/xla/stream_executor/cuda/cuda_executor.cc:998] successful NUMA node read from SysFS had negative value (-1), but there must be at least one NUMA node, so returning NUMA node zero. See more at https://github.com/torvalds/linux/blob/v6.0/Documentation/ABI/testing/sysfs-bus-pci#L344-L355
+2024-05-20 20:38:38.547327: I external/local_xla/xla/stream_executor/cuda/cuda_executor.cc:998] successful NUMA node read from SysFS had negative value (-1), but there must be at least one NUMA node, so returning NUMA node zero. See more at https://github.com/torvalds/linux/blob/v6.0/Documentation/ABI/testing/sysfs-bus-pci#L344-L355
+2024-05-20 20:38:38.595359: I external/local_xla/xla/stream_executor/cuda/cuda_executor.cc:998] successful NUMA node read from SysFS had negative value (-1), but there must be at least one NUMA node, so returning NUMA node zero. See more at https://github.com/torvalds/linux/blob/v6.0/Documentation/ABI/testing/sysfs-bus-pci#L344-L355
+2024-05-20 20:38:38.595443: I external/local_xla/xla/stream_executor/cuda/cuda_executor.cc:998] successful NUMA node read from SysFS had negative value (-1), but there must be at least one NUMA node, so returning NUMA node zero. See more at https://github.com/torvalds/linux/blob/v6.0/Documentation/ABI/testing/sysfs-bus-pci#L344-L355
+2024-05-20 20:38:38.595497: I external/local_xla/xla/stream_executor/cuda/cuda_executor.cc:998] successful NUMA node read from SysFS had negative value (-1), but there must be at least one NUMA node, so returning NUMA node zero. See more at https://github.com/torvalds/linux/blob/v6.0/Documentation/ABI/testing/sysfs-bus-pci#L344-L355
+2024-05-20 20:38:38.595543: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1928] Created device /job:localhost/replica:0/task:0/device:GPU:0 with 13677 MB memory:  -> device: 0, name: NVIDIA GeForce RTX 4080, pci bus id: 0000:01:00.0, compute capability: 8.9
+Model: "sequential"
+┏━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┳━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┳━━━━━━━━━━━━━━━━━┓
+┃ Layer (type)                         ┃ Output Shape                ┃         Param # ┃
+┡━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━╇━━━━━━━━━━━━━━━━━━━━━━━━━━━━━╇━━━━━━━━━━━━━━━━━┩
+│ dense (Dense)                        │ (None, 150)                 │         150,000 │
+├──────────────────────────────────────┼─────────────────────────────┼─────────────────┤
+│ dense_1 (Dense)                      │ (None, 1000)                │         150,000 │
+└──────────────────────────────────────┴─────────────────────────────┴─────────────────┘
+ Total params: 300,000 (1.14 MB)
+ Trainable params: 300,000 (1.14 MB)
+ Non-trainable params: 0 (0.00 B)
+Epoch 1/10
+/home/jet/miniconda3/envs/tf/lib/python3.11/site-packages/keras/src/trainers/data_adapters/py_dataset_adapter.py:120: UserWarning: Your `PyDataset` class should call `super().__init__(**kwargs)` in its constructor. `**kwargs` can include `workers`, `use_multiprocessing`, `max_queue_size`. Do not pass these arguments to `fit()`, as they will be ignored.
+  self._warn_if_super_not_called()
+WARNING: All log messages before absl::InitializeLog() is called are written to STDERR
+I0000 00:00:1716194319.055540  192376 service.cc:145] XLA service 0x720800004fa0 initialized for platform CUDA (this does not guarantee that XLA will be used). Devices:
+I0000 00:00:1716194319.055564  192376 service.cc:153]   StreamExecutor device (0): NVIDIA GeForce RTX 4080, Compute Capability 8.9
+2024-05-20 20:38:39.062692: I tensorflow/compiler/mlir/tensorflow/utils/dump_mlir_util.cc:268] disabling MLIR crash reproducer, set env var `MLIR_CRASH_REPRODUCER_DIRECTORY` to enable.
+2024-05-20 20:38:39.089416: I external/local_xla/xla/stream_executor/cuda/cuda_dnn.cc:465] Loaded cuDNN version 8907
+WARNING: All log messages before absl::InitializeLog() is called are written to STDERR
+I0000 00:00:1716194319.320170  192438 asm_compiler.cc:369] ptxas warning : Registers are spilled to local memory in function 'triton_gemm_dot_213', 96 bytes spill stores, 124 bytes spill loads
+
+I0000 00:00:1716194319.448918  192437 asm_compiler.cc:369] ptxas warning : Registers are spilled to local memory in function 'triton_gemm_dot_213', 44 bytes spill stores, 44 bytes spill loads
+
+I0000 00:00:1716194319.453496  192440 asm_compiler.cc:369] ptxas warning : Registers are spilled to local memory in function 'triton_gemm_dot_213', 100 bytes spill stores, 100 bytes spill loads
+
+I0000 00:00:1716194319.463915  192445 asm_compiler.cc:369] ptxas warning : Registers are spilled to local memory in function 'triton_gemm_dot_213', 220 bytes spill stores, 196 bytes spill loads
+
+I0000 00:00:1716194319.545874  192458 asm_compiler.cc:369] ptxas warning : Registers are spilled to local memory in function 'triton_gemm_dot_241', 8 bytes spill stores, 8 bytes spill loads
+
+I0000 00:00:1716194319.595719  192455 asm_compiler.cc:369] ptxas warning : Registers are spilled to local memory in function 'triton_gemm_dot_213', 12 bytes spill stores, 12 bytes spill loads
+
+I0000 00:00:1716194319.608587  192449 asm_compiler.cc:369] ptxas warning : Registers are spilled to local memory in function 'triton_gemm_dot_213', 340 bytes spill stores, 340 bytes spill loads
+
+I0000 00:00:1716194319.631314  192454 asm_compiler.cc:369] ptxas warning : Registers are spilled to local memory in function 'triton_gemm_dot_213', 780 bytes spill stores, 780 bytes spill loads
+
+I0000 00:00:1716194319.631329  192450 asm_compiler.cc:369] ptxas warning : Registers are spilled to local memory in function 'triton_gemm_dot_78', 4 bytes spill stores, 4 bytes spill loads
+
+I0000 00:00:1716194319.786625  192441 asm_compiler.cc:369] ptxas warning : Registers are spilled to local memory in function 'triton_gemm_dot_78', 24 bytes spill stores, 24 bytes spill loads
+
+I0000 00:00:1716194319.874089  192459 asm_compiler.cc:369] ptxas warning : Registers are spilled to local memory in function 'triton_gemm_dot_78', 676 bytes spill stores, 736 bytes spill loads
+
+I0000 00:00:1716194319.972514  192458 asm_compiler.cc:369] ptxas warning : Registers are spilled to local memory in function 'triton_gemm_dot_241', 8 bytes spill stores, 8 bytes spill loads
+
+I0000 00:00:1716194319.977725  192436 asm_compiler.cc:369] ptxas warning : Registers are spilled to local memory in function 'triton_gemm_dot_78', 56 bytes spill stores, 56 bytes spill loads
+
+I0000 00:00:1716194319.998745  192453 asm_compiler.cc:369] ptxas warning : Registers are spilled to local memory in function 'triton_gemm_dot_78', 20 bytes spill stores, 20 bytes spill loads
+
+I0000 00:00:1716194320.070640  192440 asm_compiler.cc:369] ptxas warning : Registers are spilled to local memory in function 'triton_gemm_dot_241', 120 bytes spill stores, 120 bytes spill loads
+
+I0000 00:00:1716194320.192171  192450 asm_compiler.cc:369] ptxas warning : Registers are spilled to local memory in function 'triton_gemm_dot_78', 4 bytes spill stores, 4 bytes spill loads
+
+I0000 00:00:1716194320.569888  192376 device_compiler.h:188] Compiled cluster using XLA!  This line is logged at most once for the lifetime of the process.
+4570/4570 ━━━━━━━━━━━━━━━━━━━━ 27s 6ms/step - accuracy: 0.0905 - loss: 5.7168 - val_accuracy: 0.0888 - val_loss: 5.5908
+Epoch 2/10
+4570/4570 ━━━━━━━━━━━━━━━━━━━━ 25s 5ms/step - accuracy: 0.1015 - loss: 5.3957 - val_accuracy: 0.0892 - val_loss: 5.5781
+Epoch 3/10
+4570/4570 ━━━━━━━━━━━━━━━━━━━━ 25s 5ms/step - accuracy: 0.1018 - loss: 5.3631 - val_accuracy: 0.0887 - val_loss: 5.5770
+Epoch 4/10
+4570/4570 ━━━━━━━━━━━━━━━━━━━━ 25s 6ms/step - accuracy: 0.1019 - loss: 5.3388 - val_accuracy: 0.0891 - val_loss: 5.5793
+Epoch 5/10
+4570/4570 ━━━━━━━━━━━━━━━━━━━━ 25s 5ms/step - accuracy: 0.1016 - loss: 5.3229 - val_accuracy: 0.0888 - val_loss: 5.5830
+Epoch 6/10
+4570/4570 ━━━━━━━━━━━━━━━━━━━━ 25s 6ms/step - accuracy: 0.1015 - loss: 5.3094 - val_accuracy: 0.0891 - val_loss: 5.5909
+Epoch 7/10
+4570/4570 ━━━━━━━━━━━━━━━━━━━━ 25s 5ms/step - accuracy: 0.1015 - loss: 5.2981 - val_accuracy: 0.0890 - val_loss: 5.5984
+Epoch 8/10
+4570/4570 ━━━━━━━━━━━━━━━━━━━━ 25s 5ms/step - accuracy: 0.1012 - loss: 5.2892 - val_accuracy: 0.0889 - val_loss: 5.6034
+Epoch 9/10
+4570/4570 ━━━━━━━━━━━━━━━━━━━━ 25s 6ms/step - accuracy: 0.1007 - loss: 5.2835 - val_accuracy: 0.0892 - val_loss: 5.6105
+Epoch 10/10
+4570/4570 ━━━━━━━━━━━━━━━━━━━━ 25s 6ms/step - accuracy: 0.1018 - loss: 5.2746 - val_accuracy: 0.0890 - val_loss: 5.6169
+Model: "sequential"
+┏━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┳━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┳━━━━━━━━━━━━━━━━━┓
+┃ Layer (type)                         ┃ Output Shape                ┃         Param # ┃
+┡━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━╇━━━━━━━━━━━━━━━━━━━━━━━━━━━━━╇━━━━━━━━━━━━━━━━━┩
+│ dense (Dense)                        │ (None, 150)                 │         150,000 │
+├──────────────────────────────────────┼─────────────────────────────┼─────────────────┤
+│ dense_1 (Dense)                      │ (None, 1000)                │         150,000 │
+└──────────────────────────────────────┴─────────────────────────────┴─────────────────┘
+ Total params: 900,002 (3.43 MB)
+ Trainable params: 300,000 (1.14 MB)
+ Non-trainable params: 0 (0.00 B)
+ Optimizer params: 600,002 (2.29 MB)
+WARNING:absl:The `save_format` argument is deprecated in Keras 3. We recommend removing this argument as it can be inferred from the file path. Received: save_format=h5
+WARNING:absl:You are saving your model as an HDF5 file via `model.save()` or `keras.saving.save_model(model)`. This file format is considered legacy. We recommend using instead the native Keras format, e.g. `model.save('my_model.keras')` or `keras.saving.save_model(model, 'my_model.keras')`. 
+Embedding shape: (1000, 150)
+Loading data generator...
+/home/jet/csoc420_assignment2/transformer.py:83: UserWarning: Do not pass an `input_shape`/`input_dim` argument to a layer. When using Sequential models, prefer using an `Input(shape)` object as the first layer in the model instead.
+  super().__init__(input_shape=(seq_len,))
+Model: "sequential_1"
+┏━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┳━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┳━━━━━━━━━━━━━━━━━┓
+┃ Layer (type)                         ┃ Output Shape                ┃         Param # ┃
+┡━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━╇━━━━━━━━━━━━━━━━━━━━━━━━━━━━━╇━━━━━━━━━━━━━━━━━┩
+│ one_hot_embedding (OneHotEmbedding)  │ (None, 1000)                │               0 │
+├──────────────────────────────────────┼─────────────────────────────┼─────────────────┤
+│ positional_encoding                  │ (1, 128, 1000)              │               0 │
+│ (PositionalEncoding)                 │                             │                 │
+├──────────────────────────────────────┼─────────────────────────────┼─────────────────┤
+│ transformer_layer (TransformerLayer) │ (1, 128, 1000)              │       1,543,024 │
+├──────────────────────────────────────┼─────────────────────────────┼─────────────────┤
+│ transformer_layer_1                  │ (1, 128, 1000)              │       1,543,024 │
+│ (TransformerLayer)                   │                             │                 │
+├──────────────────────────────────────┼─────────────────────────────┼─────────────────┤
+│ transformer_layer_2                  │ (1, 128, 1000)              │       1,543,024 │
+│ (TransformerLayer)                   │                             │                 │
+├──────────────────────────────────────┼─────────────────────────────┼─────────────────┤
+│ transformer_layer_3                  │ (1, 128, 1000)              │       1,543,024 │
+│ (TransformerLayer)                   │                             │                 │
+├──────────────────────────────────────┼─────────────────────────────┼─────────────────┤
+│ transformer_layer_4                  │ (1, 128, 1000)              │       1,543,024 │
+│ (TransformerLayer)                   │                             │                 │
+├──────────────────────────────────────┼─────────────────────────────┼─────────────────┤
+│ transformer_layer_5                  │ (1, 128, 1000)              │       1,543,024 │
+│ (TransformerLayer)                   │                             │                 │
+├──────────────────────────────────────┼─────────────────────────────┼─────────────────┤
+│ dense_14 (Dense)                     │ (1, 128, 1000)              │       1,001,000 │
+└──────────────────────────────────────┴─────────────────────────────┴─────────────────┘
+ Total params: 10,259,144 (39.14 MB)
+ Trainable params: 10,259,144 (39.14 MB)
+ Non-trainable params: 0 (0.00 B)
+Epoch 1/20
+W0000 00:00:1716194581.965104  192372 assert_op.cc:38] Ignoring Assert operator compile_loss/masked_loss/sparse_categorical_crossentropy/SparseSoftmaxCrossEntropyWithLogits/assert_equal_1/Assert/Assert
+I0000 00:00:1716194584.375100  195968 asm_compiler.cc:369] ptxas warning : Registers are spilled to local memory in function 'triton_gemm_dot_234', 4 bytes spill stores, 4 bytes spill loads
+
+I0000 00:00:1716194584.565374  195964 asm_compiler.cc:369] ptxas warning : Registers are spilled to local memory in function 'triton_gemm_dot_38', 88 bytes spill stores, 88 bytes spill loads
+
+I0000 00:00:1716194584.641150  195950 asm_compiler.cc:369] ptxas warning : Registers are spilled to local memory in function 'triton_gemm_dot_38', 672 bytes spill stores, 640 bytes spill loads
+
+I0000 00:00:1716194584.771557  195967 asm_compiler.cc:369] ptxas warning : Registers are spilled to local memory in function 'triton_gemm_dot_248', 8 bytes spill stores, 8 bytes spill loads
+
+I0000 00:00:1716194584.958928  195958 asm_compiler.cc:369] ptxas warning : Registers are spilled to local memory in function 'triton_gemm_dot_38', 100 bytes spill stores, 92 bytes spill loads
+
+I0000 00:00:1716194585.066369  195963 asm_compiler.cc:369] ptxas warning : Registers are spilled to local memory in function 'triton_gemm_dot_156', 212 bytes spill stores, 168 bytes spill loads
+
+I0000 00:00:1716194585.100252  195954 asm_compiler.cc:369] ptxas warning : Registers are spilled to local memory in function 'triton_gemm_dot_42', 8 bytes spill stores, 8 bytes spill loads
+
+I0000 00:00:1716194585.145516  195956 asm_compiler.cc:369] ptxas warning : Registers are spilled to local memory in function 'triton_gemm_dot_156', 76 bytes spill stores, 80 bytes spill loads
+
+I0000 00:00:1716194585.247757  195959 asm_compiler.cc:369] ptxas warning : Registers are spilled to local memory in function 'triton_gemm_dot_38', 108 bytes spill stores, 108 bytes spill loads
+
+I0000 00:00:1716194585.287892  195957 asm_compiler.cc:369] ptxas warning : Registers are spilled to local memory in function 'triton_gemm_dot_42', 8 bytes spill stores, 8 bytes spill loads
+
+I0000 00:00:1716194585.322958  195951 asm_compiler.cc:369] ptxas warning : Registers are spilled to local memory in function 'triton_gemm_dot_38', 344 bytes spill stores, 344 bytes spill loads
+
+I0000 00:00:1716194585.456574  195963 asm_compiler.cc:369] ptxas warning : Registers are spilled to local memory in function 'triton_gemm_dot_156', 412 bytes spill stores, 412 bytes spill loads
+
+I0000 00:00:1716194588.432292  192372 asm_compiler.cc:369] ptxas warning : Registers are spilled to local memory in function 'loop_add_subtract_fusion_21', 112 bytes spill stores, 112 bytes spill loads
+
+36418/36420 ━━━━━━━━━━━━━━━━━━━━ 0s 13ms/step - loss: 1.7986 - masked_accuracy: 0.6163W0000 00:00:1716195063.356330  192372 assert_op.cc:38] Ignoring Assert operator compile_loss/masked_loss/sparse_categorical_crossentropy/SparseSoftmaxCrossEntropyWithLogits/assert_equal_1/Assert/Assert
+36420/36420 ━━━━━━━━━━━━━━━━━━━━ 504s 13ms/step - loss: 1.7985 - masked_accuracy: 0.6163 - val_loss: 7.5073 - val_masked_accuracy: 0.3514
+Epoch 2/20
+36420/36420 ━━━━━━━━━━━━━━━━━━━━ 488s 13ms/step - loss: 0.2239 - masked_accuracy: 0.9423 - val_loss: 8.5926 - val_masked_accuracy: 0.3527
+Epoch 3/20
+36420/36420 ━━━━━━━━━━━━━━━━━━━━ 488s 13ms/step - loss: 0.1748 - masked_accuracy: 0.9560 - val_loss: 9.1797 - val_masked_accuracy: 0.3525
+Epoch 4/20
+36420/36420 ━━━━━━━━━━━━━━━━━━━━ 488s 13ms/step - loss: 0.1545 - masked_accuracy: 0.9614 - val_loss: 9.4931 - val_masked_accuracy: 0.3533
+Epoch 5/20
+36420/36420 ━━━━━━━━━━━━━━━━━━━━ 488s 13ms/step - loss: 0.1426 - masked_accuracy: 0.9646 - val_loss: 9.6993 - val_masked_accuracy: 0.3539
+Epoch 6/20
+36420/36420 ━━━━━━━━━━━━━━━━━━━━ 489s 13ms/step - loss: 0.1346 - masked_accuracy: 0.9667 - val_loss: 9.8545 - val_masked_accuracy: 0.3539
+Epoch 7/20
+36420/36420 ━━━━━━━━━━━━━━━━━━━━ 488s 13ms/step - loss: 0.1286 - masked_accuracy: 0.9682 - val_loss: 9.9629 - val_masked_accuracy: 0.3529
+Epoch 8/20
+36420/36420 ━━━━━━━━━━━━━━━━━━━━ 489s 13ms/step - loss: 0.1240 - masked_accuracy: 0.9694 - val_loss: 10.0038 - val_masked_accuracy: 0.3532
+Epoch 9/20
+36420/36420 ━━━━━━━━━━━━━━━━━━━━ 489s 13ms/step - loss: 0.1204 - masked_accuracy: 0.9703 - val_loss: 10.0948 - val_masked_accuracy: 0.3535
+Epoch 10/20
+36420/36420 ━━━━━━━━━━━━━━━━━━━━ 488s 13ms/step - loss: 0.1173 - masked_accuracy: 0.9711 - val_loss: 10.1315 - val_masked_accuracy: 0.3531
+Epoch 11/20
+36420/36420 ━━━━━━━━━━━━━━━━━━━━ 488s 13ms/step - loss: 0.1148 - masked_accuracy: 0.9718 - val_loss: 10.1731 - val_masked_accuracy: 0.3529
+Epoch 12/20
+36420/36420 ━━━━━━━━━━━━━━━━━━━━ 489s 13ms/step - loss: 0.1126 - masked_accuracy: 0.9723 - val_loss: 10.1801 - val_masked_accuracy: 0.3534
+Epoch 13/20
+36420/36420 ━━━━━━━━━━━━━━━━━━━━ 490s 13ms/step - loss: 0.1107 - masked_accuracy: 0.9728 - val_loss: 10.2225 - val_masked_accuracy: 0.3534
+Epoch 14/20
+36420/36420 ━━━━━━━━━━━━━━━━━━━━ 489s 13ms/step - loss: 0.1090 - masked_accuracy: 0.9732 - val_loss: 10.2257 - val_masked_accuracy: 0.3526
+Epoch 15/20
+36420/36420 ━━━━━━━━━━━━━━━━━━━━ 489s 13ms/step - loss: 0.1075 - masked_accuracy: 0.9736 - val_loss: 10.2750 - val_masked_accuracy: 0.3534
+Epoch 16/20
+36420/36420 ━━━━━━━━━━━━━━━━━━━━ 490s 13ms/step - loss: 0.1063 - masked_accuracy: 0.9739 - val_loss: 10.2483 - val_masked_accuracy: 0.3537
+Epoch 17/20
+36420/36420 ━━━━━━━━━━━━━━━━━━━━ 489s 13ms/step - loss: 0.1051 - masked_accuracy: 0.9742 - val_loss: 10.2587 - val_masked_accuracy: 0.3536
+Epoch 18/20
+36420/36420 ━━━━━━━━━━━━━━━━━━━━ 489s 13ms/step - loss: 0.1040 - masked_accuracy: 0.9745 - val_loss: 10.2583 - val_masked_accuracy: 0.3528
+Epoch 19/20
+36420/36420 ━━━━━━━━━━━━━━━━━━━━ 489s 13ms/step - loss: 0.1030 - masked_accuracy: 0.9747 - val_loss: 10.2272 - val_masked_accuracy: 0.3529
+Epoch 20/20
+36420/36420 ━━━━━━━━━━━━━━━━━━━━ 490s 13ms/step - loss: 0.1022 - masked_accuracy: 0.9749 - val_loss: 10.2575 - val_masked_accuracy: 0.3529
+It is a truth universally acknowledgedI0000 00:00:1716204365.189971  299057 asm_compiler.cc:369] ptxas warning : Registers are spilled to local memory in function 'triton_gemm_dot_50', 12 bytes spill stores, 12 bytes spill loads
+
+I0000 00:00:1716204365.206576  299037 asm_compiler.cc:369] ptxas warning : Registers are spilled to local memory in function 'triton_gemm_dot_50', 216 bytes spill stores, 216 bytes spill loads
+
+I0000 00:00:1716204365.226511  299034 asm_compiler.cc:369] ptxas warning : Registers are spilled to local memory in function 'triton_gemm_dot_50', 12 bytes spill stores, 12 bytes spill loads
+
+I0000 00:00:1716204365.410909  299046 asm_compiler.cc:369] ptxas warning : Registers are spilled to local memory in function 'triton_gemm_dot_50', 396 bytes spill stores, 396 bytes spill loads
+
+I0000 00:00:1716204365.492336  299050 asm_compiler.cc:369] ptxas warning : Registers are spilled to local memory in function 'triton_gemm_dot_50', 368 bytes spill stores, 368 bytes spill loads
+
+ him to be different from themselves and from everyone else,  expected great things of him,  listened to him,  admired,  and imitated him,  and with them Prince Andrew was natural and pleasant.  Others,  the majority,  disliked him and considered him conceited,  cold,  and disagree

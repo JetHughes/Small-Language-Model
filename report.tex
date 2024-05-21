@@ -1,0 +1,122 @@
+% LaTeX Template for short student reports.
+% Citations should be in bibtex format and go in references.bib
+\documentclass[a4paper, 11pt]{article}
+\usepackage[top=3cm, bottom=3cm, left = 2cm, right = 2cm]{geometry} 
+\geometry{a4paper} 
+\usepackage[utf8]{inputenc}
+\usepackage{textcomp}
+\usepackage{graphicx} 
+\usepackage{amsmath,amssymb}  
+\usepackage{bm}  
+\usepackage[pdftex,bookmarks,colorlinks,breaklinks]{hyperref}  
+%\hypersetup{linkcolor=black,citecolor=black,filecolor=black,urlcolor=black} % black links, for printed output
+\usepackage{memhfixc} 
+\usepackage{pdfsync}  
+\usepackage{fancyhdr}
+
+% customised packages
+\usepackage{listings}
+\usepackage{parskip}
+\usepackage{subcaption}
+\usepackage{xcolor}
+\newcommand\todo[1]{\textcolor{red}{#1}}
+
+% title info
+\title{Transformer Based Language Model}
+\author{Jet Hughes}
+\date{}
+
+\begin{document}
+\maketitle
+% \newpage
+
+% \tableofcontents
+% \newpage
+
+\section{Introduction}
+This report investigates alternate forms of input for a transformer language model. We first describe a method for vector embedding of vocabulary using a Continuous Bag of Words model. Using this vocabulary embedding, we train a transformer model and compare it to a similar model trained on one-hot encoded vocabulary. We find that ...
+
+The data used for this project is a combination of two classic novels Jane Austen's Pride and Prejudice and Leo Tolstoy's War and Peace. The text was cleaned by removing unwanted characters and standardising spaces between alphanumeric characters. 
+
+\section{Tokenisation}
+War and Peace contains ~34k unique words and ~600k total words, while Pride and Prejudice contains approximately ~12k unique words and ~120k total words. Both texts were converted into N-gram tokens using byte pair encoding (BPE) \cite{sennrich2015neural}. Although most published work on language models uses a vocabulary size of about 32K, our dataset is significantly smaller, and our resources are limited. While a smaller vocabulary size is more efficient, anything less than 1000 tokens is so small that almost no tokens are complete words this can be seen in Table \ref{tab:vocab_size_vs_complete_words}. Since sub-word tokens contain little semantic information it would be difficult for the Tok2vec model to create meaningful embeddings, and the language model would perform poorly. For us, a vocabulary size of 5000 or higher requires a prohibitive amount of memory and computation. Figure \ref{fig:word_frequencies} shows the number of occurrences of the most common 1000 words in War and Peace. For this project, we think a vocabulary size that captures at least the most common 200-400 words is sufficient. Table \ref{tab:vocab_size_vs_complete_words} shows that a vocabulary size of 2000 tokens captures 711 complete words, which is a good compromise between efficiency and performance and should be sufficient for the transformer model to learn meaningful embeddings.
+
+\begin{figure}
+    \centering
+    \includegraphics[width=0.75\linewidth]{common_words.png}
+    \caption{Frequencies of the Most Common 1000 Words in War and Peace}
+    \label{fig:word_frequencies}
+\end{figure}
+
+\begin{table}[h!]
+\centering
+\begin{tabular}{|c|c|c|}
+\hline
+Vocabulary Size & No. Complete English Words & Total Tokens in Text \\
+\hline
+500 & 51 & 1416586 \\
+1000 & 261 & 1295098 \\
+2000 & 711 & 1151325 \\
+5000 & 2011 & 887094 \\
+\hline
+\end{tabular}
+\caption{Vocabulary size vs. number of English words and total tokens in text}
+\label{tab:vocab_size_vs_complete_words}
+\end{table}
+
+
+\section{Vector Embedding}
+
+Good information about the semantics and syntax of words is crucial for a language model to perform well. Mikolov et al. \cite{mikolov2013efficient} introduced two new methods of word representation. They represent words as dense vectors in a continuous vector space. Both methods use a simple neural network with one hidden layer to learn these vector representations. Given a text encoded as a sequence of one-hot encoded words, the first method, Continuous Bag of Words (CBOW), is trained to predict a target word given a number of context words before and after it. The second method, Skip-gram, is trained to predict context words given a target word. The rows of the weight matrix between the input and hidden layer become the word embeddings.
+
+The results from \cite{mikolov2013efficient} show that the CBOW model is faster to train and has better accuracy for frequent words, while the Skip-gram model is better for small datasets and has better accuracy for infrequent words. Since each training example for CBOW is the entire context window, it needs a larger dataset for good generalization. Conversely, the Skip-gram model predicts many context words from a single target word, so there are more training examples, and it can learn better from small datasets. Since our dataset is relatively small, we use the Skip-gram model.
+
+\subsection{Training}
+
+This Skip-gram model was trained on the entirety of War and Peace encoded as tokens using a vocabulary size of 2000. The model was trained for 10 epochs with a batch size of 32. The embedding size was 150, and the context window size was 8 (4 words before and 4 words after the target word). The model was trained using the Adam optimiser with a learning rate of 0.001 and categorical cross-entropy loss. 
+
+\subsection{Results and Discussion}
+\begin{figure}
+    \centering
+    \includegraphics[width=0.8\linewidth]{figures/embedding.png}
+    \caption{t-SNE plot of 100 words from the vector embedding.}
+    \label{fig:embedding}
+\end{figure}
+
+A t-SNE plot of 100 tokens from the embedding is shown in Figure \ref{fig:embedding}. The embedding appears to have some structure, with similar tokens being grouped together. For example, the names of characters are grouped together, and so are words such as "uncle", "aunt", "father", "sister", etc. The embedding clearly encodes some amount of meaning within the embeddings.
+
+
+
+
+- vocab size vs epochs vs overfitting and accuracy up/down
+- as training goes, the embedding as in tnse become more regular
+
+ 
+\section{Transformer}
+
+Vaswani et al. \cite{vaswani2017attention} introduced self-attention, where each token in a sequence is "aware" of its surrounding tokens and "understands" their context, and the relationships between them. The model presented by Vaswani et al. is a sequence transduction model, which takes a sequence as input and predicts another sequence. We are interested in a language model, which takes a sequence of tokens as input and predicts the next token in the sequence.
+
+Our model is based on the model used in GPT-1 \cite{radford2018improving}. This model is a modified version of the transformer model presented by Vaswani et al. \cite{vaswani2017attention}. The GPT-1 is a generative model, which takes only the decoder part of the transformer model and removes cross attention. Our model differs from GPT-1 in that the vector embeddings are fixed and not learned during training.
+
+The model comprises a fixed embedding layer which converts tokens into dense vectors, followed by a positional encoding layer, a stack of $n$ transformer layers, and finally a linear dense layer and a softmax output layer.
+
+\subsection{Initial Architecture and Training}
+The model has six transformer layers. Each transformer layer has 8 attention heads, with a key dimension of 32, and a dense feed-forward layer with 256 neurons. We used a sequence length of 128 and trained for 10 epochs with a batch size of 32 on the 598,184 words in War and Peace. The vocabulary size is 2000 and the vector embedding dimension is 150 as defined earlier. The model was trained using a custom Adam optimiser to match the original transformer paper \cite{vaswani2017attention}. The loss function is a masked version of sparse categorical cross-entropy, which ignore padding tokens. The model was trained on a single NVIDIA RTX 4080 GPU.
+
+\subsection{Results}
+
+\subsection{Discussion}
+
+- tok2vec size vs onehot
+- overfitting and generalization
+- onehot generalisation vs tok2vec on different prompts
+- validation go up bad?
+
+
+\section{Conclusion}
+
+\bibliographystyle{abbrv}
+\bibliography{ref}
+
+
+\end{document}

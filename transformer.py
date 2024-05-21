@@ -4,6 +4,11 @@ __email__ = "lech.szymanski@otago.ac.nz"
 
 import tensorflow as tf
 import numpy as np
+import pickle
+import gzip
+import os
+import json
+import sys
 
 ''' 
 Helper function for building and training the transformer model.  These methods follow 
@@ -402,7 +407,97 @@ class CustomSchedule(tf.keras.optimizers.schedules.LearningRateSchedule):
     arg2 = step * (self.warmup_steps ** -1.5)
 
     return tf.math.rsqrt(self.d_model) * tf.math.minimum(arg1, arg2)
-      
+  
+class Transformer():
+  def __init__(self, seq_len, embedding=None, embedding_type="ONEHOT", embedding_shape=None):
+    self.seq_len = seq_len
+    self.embedding_type = embedding_type
+
+    self.model = tf.keras.models.Sequential()
+    if embedding_type == "ONEHOT":
+      self.vocab_size = embedding_shape[0]
+      self.vec_dim = embedding_shape[1]
+      self.model.add(OneHotEmbedding(self.vocab_size, seq_len))
+    else:
+      self.vocab_size = embedding.shape[0]
+      self.vec_dim = embedding.shape[1]
+      self.embedding = embedding
+      self.model.add(FixedEmbedding(self.embedding, seq_len))
+    
+    self.model.add(PositionalEncoding(self.vec_dim, self.seq_len))
+    self.model.add(TransformerLayer(self.vec_dim, 32, 8, 256))
+    self.model.add(TransformerLayer(self.vec_dim, 32, 8, 256))
+    self.model.add(TransformerLayer(self.vec_dim, 32, 8, 256))
+    self.model.add(TransformerLayer(self.vec_dim, 32, 8, 256))
+    self.model.add(TransformerLayer(self.vec_dim, 32, 8, 256))
+    self.model.add(TransformerLayer(self.vec_dim, 32, 8, 256))
+    self.model.add(tf.keras.layers.Dense(self.vocab_size, activation='softmax'))
+    learning_rate = CustomSchedule(self.vec_dim)
+    opt = tf.keras.optimizers.Adam(learning_rate, 
+                                    beta_1=0.9, 
+                                    beta_2=0.98,
+                                    epsilon=1e-9)
+    self.model.compile(optimizer=opt,
+                    loss=masked_loss,
+                    metrics=[masked_accuracy])
+    self.model.summary()
+    self.train_info = None
+  
+  def train(self, train_data, valid_data=None, epochs=5):
+    if valid_data:
+      self.train_info = self.model.fit(train_data, epochs=epochs, validation_data=valid_data)
+    else:
+      self.train_info = self.model.fit(train_data, epochs=transformer_epochs)
+    return self.train_info.history
+  
+  def save(self, savename):
+    model_filename = "transformer_models/" + savename + ".weights.h5"
+    history_filename = "transformer_models/history_" + savename + ".hist"
+    embedding_filename = "transformer_models/embedding_" + savename + ".npy"
+    state_filename = "transformer_models/state_" + savename + ".json"
+    state = {"seq_len": self.seq_len, "embedding_type": self.embedding_type}
+    self.model.save_weights(model_filename)
+    with gzip.open(history_filename, 'w') as f:
+      pickle.dump(self.train_info.history, f)    
+    with open(state_filename, 'w') as f:
+      json.dump(state, f)
+    np.save(embedding_filename, self.embedding)
+
+  @staticmethod
+  def load(savename):
+    model_filename = "transformer_models/" + savename + ".weights.h5"
+    history_filename = "transformer_models/history_" + savename + ".hist"
+    embedding_filename = "transformer_models/embedding_" + savename + ".npy"
+    state_filename = "transformer_models/state_" + savename + ".json"
+    with open(state_filename, 'r') as f:
+      state = json.load(f)
+    transformer = Transformer(state["seq_len"], np.load(embedding_filename), state["embedding_type"])
+    transformer.model.load_weights(model_filename)
+    with gzip.open(history_filename, 'r') as f:
+      transformer.train_info = pickle.load(f)
+    return transformer
+
+  def predict(self, prompt, tokeniser):
+    print(prompt, end='')
+    sys.stdout.flush()
+    tokens = tokeniser.encode(prompt)
+    for i in range(1,100):
+      if len(tokens) >= self.seq_len:
+        tokens = tokens[-self.seq_len:]
+      j = len(tokens)-1
+      if len(tokens) < self.seq_len:
+        x = np.concatenate([tokens,np.zeros((self.seq_len-len(tokens)),dtype='int')], axis=0)
+      else:
+        x = np.array(tokens)
+      x = np.expand_dims(x,axis=0)
+      y = self.model.predict(x,verbose=False)
+      y = np.argmax(y[:,j,:])
+      t = tokeniser.decode(y)
+      print(t, end='')
+      sys.stdout.flush()
+      tokens.append(y)
+    print("\n")
+
 if __name__ == '__main__':
     '''
     This is an example of how to build and train your transformer model.  This example uses the pretrained
@@ -424,7 +519,7 @@ if __name__ == '__main__':
     seq_len = 10     #Length of the input sequence to the transformer
     vec_dim = 768    #Dimension of the embedding vectors
 
-    epochs = 2       #Number of epochs to train for
+    transformer_epochs = 2       #Number of epochs to train for
 
     # This loads both the tokeniser and the pretrained BERT embedding, for your own
     # embedding you will have separate tokeniser and embedding loaders.
@@ -447,14 +542,14 @@ if __name__ == '__main__':
     # Fetch the (vocab_size, vec_dim)-shape embedding matrix for the BERT tokeniser,
     # for your own embedding will have to fetch the embedding matrix from your tok2vec
     # model
-    w = tokeniser.get_embedding()
+    embedding = tokeniser.get_embedding()
 
     # The first layer of the model is the embedding layer.  The fixed embedding is conveyed
     # in the w argument passed in, which is a numpy array of shape (vocab_size, vec_dim).  You
     # also need to specify the seq_len of your input sequence.  The input then is a tensorf of
     # shape (num_examples, seq_len) of integers representing tokens from the vocabulary; the
     # output is a (num_examples, seq_len, vec_dim) tensor of word vectors.
-    model.add(FixedEmbedding(w, seq_len))
+    model.add(FixedEmbedding(embedding, seq_len))
 
     # Positional endcoding is added to the embedding. This layer needs to know the vec_dim of
     # the embedding space and the seq_len of the input sequence.  The input is a tensor of shape
@@ -492,7 +587,7 @@ if __name__ == '__main__':
     model.summary()
 
     # Train the model
-    model.fit(train_data, epochs=epochs)
+    model.fit(train_data, epochs=transformer_epochs)
 
     # Test the model by generating text that follows this prompt
     prompt = "It is a truth universally acknowledged"
